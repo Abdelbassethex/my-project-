@@ -32,9 +32,6 @@ const SPECIALTIES_LIST = [
   'Emergency Medicine Physician',
   'Rheumatologist',
   'Nephrologist',
-  {id:'PR-07', title:'Chronic Disease Emergency Response', dept:'Chronic Disease Emergency', updated:'2026-03-01', severity:'high'},
-  {id:'PR-08', title:'Cancer Pain Management Protocol',   dept:'Chronic Disease Emergency', updated:'2026-02-20', severity:'high'},
-  {id:'PR-09', title:'Palliative Care Guidelines',        dept:'Chronic Disease Emergency', updated:'2026-01-15', severity:'medium'},
 ];
 
 const ALL_DOCTORS = [
@@ -290,7 +287,7 @@ const CREDENTIALS = {
   patient: {email:'patient@gmail.com', password:'patient123', role:'patient'},
 };
 
-// ─── CSS ──────────────────────────────────────────────────────────────────────
+// Css
 const css = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -306,48 +303,90 @@ const css = `
   --r:10px;--r2:14px;--r3:18px;
   --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
   --sh2:0 4px 12px rgba(0,0,0,.1);--sh3:0 8px 24px rgba(0,0,0,.12);
+  --mode-toggle-bg:#e2e8f0;--mode-toggle-txt:#475569;
 }
-body{background:var(--bg);color:var(--txt);font-family:var(--font);overflow-x:hidden;}
+[data-theme="dark"]{
+  --bg:#0d1117;--surface:#161b22;--sidebar:#0a0f1a;--sidebar-h:#1c2333;--sidebar-a:#1d3a6e;
+  --cb:#21262d;--acc:#3b82f6;--acc-d:#2563eb;--acc-l:#0d1f3c;--acc-m:#1d3a6e;
+  --green:#22c55e;--gbg:#052e16;--gbr:#14532d;
+  --red:#f87171;--rbg:#2d0a0a;--rbr:#7f1d1d;
+  --amb:#fbbf24;--abg:#2d1a00;--abr:#78350f;
+  --pur:#a78bfa;--pbg:#1e1040;--pbr:#4c1d95;
+  --txt:#e6edf3;--tm:#8b949e;--tl:#484f58;
+  --sh:0 1px 3px rgba(0,0,0,.3),0 1px 2px rgba(0,0,0,.2);
+  --sh2:0 4px 12px rgba(0,0,0,.4);--sh3:0 8px 24px rgba(0,0,0,.5);
+  --mode-toggle-bg:#21262d;--mode-toggle-txt:#8b949e;
+}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);overflow-x:hidden;transition:background .3s,color .3s;}
 ::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:#e2e8f0;}
+::-webkit-scrollbar-track{background:var(--cb);}
 ::-webkit-scrollbar-thumb{background:#93c5fd;border-radius:99px;}
 
-/* LOGIN */
-.lp{min-height:100vh;display:flex;}
-.lp-left{flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 72px;
-  background:linear-gradient(145deg,#0f2d52,#1a4480,#1e5baa);position:relative;overflow:hidden;}
-.lp-c{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08);}
-.lp-c1{width:400px;height:400px;top:-80px;right:-80px;}
-.lp-c2{width:260px;height:260px;bottom:40px;left:-60px;}
-.lp-c3{width:160px;height:160px;top:50%;right:18%;}
+/* THEME TOGGLE */
+.theme-toggle{position:fixed;top:18px;right:22px;z-index:999;width:44px;height:44px;border-radius:50%;
+  background:var(--surface);border:1.5px solid var(--cb);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:1.1rem;box-shadow:var(--sh2);transition:all .25s;color:var(--txt);}
+.theme-toggle:hover{transform:scale(1.08);box-shadow:var(--sh3);}
+
+/* LOGIN — centered card design */
+.lp{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);position:relative;overflow:hidden;padding:20px;}
+.lp::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 900px 700px at 50% 0%,rgba(37,99,235,.1) 0%,transparent 70%);
+  pointer-events:none;}
+.lp-grid-bg{position:absolute;inset:0;
+  background-image:linear-gradient(var(--cb) 1px,transparent 1px),linear-gradient(90deg,var(--cb) 1px,transparent 1px);
+  background-size:48px 48px;opacity:.35;pointer-events:none;}
+.lp-blob1{position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.12) 0%,transparent 70%);
+  top:-200px;left:-200px;pointer-events:none;}
+.lp-blob2{position:absolute;width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,.08) 0%,transparent 70%);
+  bottom:-150px;right:-150px;pointer-events:none;}
+
+.lp-card{width:100%;max-width:920px;display:grid;grid-template-columns:1fr 1fr;
+  border-radius:24px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.15),0 0 0 1px var(--cb);
+  position:relative;z-index:2;animation:fu .5s ease forwards;}
+@keyframes fu{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* left panel */
+.lp-left{background:linear-gradient(155deg,#0c1f3f 0%,#1a3a6e 50%,#1e4faa 100%);
+  padding:52px 44px;display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;}
+.lp-dots{position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);
+  background-size:22px 22px;pointer-events:none;}
+.lp-ring1{position:absolute;width:320px;height:320px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.07);top:-80px;right:-80px;}
+.lp-ring2{position:absolute;width:200px;height:200px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.05);bottom:-40px;left:-40px;}
 .lp-inner{position:relative;z-index:2;}
-.lp-brand{display:flex;align-items:center;gap:14px;margin-bottom:52px;}
-.lp-brand-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.15);
-  border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;
-  font-size:.75rem;font-weight:800;color:#fff;letter-spacing:.5px;}
-.lp-bname{font-size:1.05rem;font-weight:800;letter-spacing:2.5px;color:#fff;}
-.lp-bsub{font-size:.62rem;color:rgba(255,255,255,.45);letter-spacing:1px;}
-.lp-h{font-size:3rem;font-weight:800;line-height:1.12;letter-spacing:-1px;color:#fff;margin-bottom:18px;}
+.lp-brand{display:flex;align-items:center;gap:12px;margin-bottom:48px;}
+.lp-brand-icon{width:42px;height:42px;border-radius:11px;
+  background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.08));
+  border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:800;color:#fff;letter-spacing:.5px;}
+.lp-bname{font-size:1rem;font-weight:800;letter-spacing:2.5px;color:#fff;}
+.lp-bsub{font-size:.6rem;color:rgba(255,255,255,.4);letter-spacing:.8px;}
+.lp-h{font-size:2.4rem;font-weight:800;line-height:1.15;letter-spacing:-.8px;color:#fff;margin-bottom:14px;}
 .lp-h em{font-style:normal;color:#93c5fd;}
-.lp-s{font-size:.93rem;color:rgba(255,255,255,.62);max-width:380px;line-height:1.8;}
-.lp-feats{margin-top:44px;display:flex;flex-direction:column;gap:14px;}
-.lp-feat{display:flex;align-items:center;gap:12px;}
-.lp-fcheck{width:20px;height:20px;border-radius:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+.lp-s{font-size:.88rem;color:rgba(255,255,255,.58);line-height:1.8;max-width:300px;}
+.lp-feats{margin-top:36px;display:flex;flex-direction:column;gap:12px;}
+.lp-feat{display:flex;align-items:center;gap:10px;}
+.lp-fcheck{width:18px;height:18px;border-radius:5px;
+  background:rgba(147,197,253,.15);border:1px solid rgba(147,197,253,.3);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.lp-fcheck-i{width:7px;height:7px;border-radius:2px;background:#93c5fd;}
-.lp-ft{font-size:.84rem;color:rgba(255,255,255,.72);}
-.lp-stats{margin-top:48px;display:flex;gap:28px;}
-.lp-sv{font-size:1.9rem;font-weight:800;color:#fff;line-height:1;}
-.lp-sl{font-size:.73rem;color:rgba(255,255,255,.48);margin-top:3px;}
-.lp-credit{margin-top:36px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);}
-.lp-credit-lbl{font-size:.65rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.15em;margin-bottom:5px;}
-.lp-credit-name{font-size:.88rem;color:rgba(255,255,255,.75);font-weight:600;}
-.lp-credit-ar{font-size:.82rem;color:rgba(147,197,253,.7);direction:rtl;margin-top:2px;}
-.lp-right{width:500px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:48px 44px;background:var(--bg);}
-.lb{width:100%;max-width:390px;animation:fu .4s ease forwards;}
-@keyframes fu{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-.lb-title{font-size:1.9rem;font-weight:800;color:var(--txt);letter-spacing:-.5px;margin-bottom:5px;}
-.lb-sub{font-size:.88rem;color:var(--tm);margin-bottom:28px;}
+.lp-fcheck-i{width:6px;height:6px;border-radius:2px;background:#93c5fd;}
+.lp-ft{font-size:.82rem;color:rgba(255,255,255,.68);}
+.lp-stats{display:flex;gap:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);}
+.lp-sv{font-size:1.7rem;font-weight:800;color:#fff;line-height:1;}
+.lp-sl{font-size:.68rem;color:rgba(255,255,255,.4);margin-top:2px;}
+
+/* right panel = login form */
+.lp-right{background:var(--surface);padding:52px 44px;display:flex;align-items:center;justify-content:center;}
+.lb{width:100%;max-width:340px;}
+.lb-title{font-size:1.75rem;font-weight:800;color:var(--txt);letter-spacing:-.5px;margin-bottom:4px;}
+.lb-sub{font-size:.86rem;color:var(--tm);margin-bottom:26px;}
 .role-tabs{display:flex;gap:8px;margin-bottom:26px;}
 .rtab{flex:1;padding:12px 8px;border-radius:var(--r);border:2px solid var(--cb);cursor:pointer;
   font-family:var(--font);font-size:.78rem;font-weight:700;color:var(--tm);background:var(--surface);transition:all .2s;text-align:center;}
@@ -627,17 +666,23 @@ body{background:var(--bg);color:var(--txt);font-family:var(--font);overflow-x:hi
 .tip-txt{font-size:.84rem;color:var(--txt);line-height:1.6;}
 .tip-lbl{font-size:.68rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
 
-@media(max-width:900px){.lp-left{padding:40px 32px;}.lp-h{font-size:2.2rem;}.lp-stats{display:none;}}
+.tbl th{background:var(--bg);}
+.tbl tr:hover td{background:var(--acc-l);}
+.tbl td,.lab-row,.med-row,.sym-row,.hist-item,.log-row{border-color:var(--cb);}
+.spec-item{border-color:var(--cb);}
+
+@media(max-width:900px){.lp-left{padding:40px 32px;}.lp-h{font-size:1.9rem;}}
 @media(max-width:700px){
-  .lp{flex-direction:column;}.lp-left{min-height:auto;padding:32px 24px;}.lp-right{width:100%;}
+  .lp-card{grid-template-columns:1fr;}.lp-left{display:none;}.lp-right{padding:40px 28px;}
   .sidebar{width:54px;}.sb-hdr,.ni .nav-label,.nav-sec,.sb-pill{display:none;}.ni{justify-content:center;}
   .mbody{padding:18px 14px;}.mhdr{padding:16px 18px;}
   .pt-grid2,.pt-grid3,.vital-grid{grid-template-columns:1fr 1fr;}
   .dc-di{grid-template-columns:1fr 1fr;}
+  .theme-toggle{top:12px;right:12px;}
 }
 `;
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
+// helps
 const Bdg = ({type,label}) => <span className={`badge b-${type}`}>{label}</span>;
 function getInit(name){return name.replace('Dr.','').trim().split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();}
 
@@ -653,7 +698,7 @@ function Modal({title,onClose,children}){
 
 function CreditBanner(){ return null; }
 
-// ── SPECIALTY DROPDOWN ────────────────────────────────────────────────────────
+// specialty Dropdown
 function SpecialtyDropdown({value, onChange}){
   const [open,setOpen]=useState(false);
   const [q,setQ]=useState('');
@@ -693,7 +738,7 @@ function SpecialtyDropdown({value, onChange}){
   );
 }
 
-// ─── DIRECTORY ────────────────────────────────────────────────────────────────
+// directory
 function Directory(){
   const [q,setQ]=useState('');
   const [spec,setSpec]=useState('');
@@ -781,7 +826,7 @@ function Directory(){
   </>);
 }
 
-// ─── ADMIN PAGES ──────────────────────────────────────────────────────────────
+// Admin pages
 function ADepts(){
   return(<><CreditBanner/>
     <div className="dept-grid">
@@ -895,7 +940,7 @@ function ALogs(){
   </>);
 }
 
-// ─── DOCTOR PAGES ─────────────────────────────────────────────────────────────
+// Doctor pages
 function DPatients(){
   const mine=PATIENTS.filter(p=>p.doctor==='Dr. Sara Mei');
   const [q,setQ]=useState('');
@@ -1002,7 +1047,7 @@ function DSchedule(){
   </>);
 }
 
-// ─── PATIENT PORTAL ───────────────────────────────────────────────────────────
+// patient portal
 const HEALTH_TIPS = {
   Cardiology:['Take a 30-min walk daily to support heart health','Monitor your blood pressure every morning','Reduce sodium intake — aim for less than 2,300mg/day','Stay hydrated with at least 8 glasses of water'],
   Neurology:['Prioritize 7-9 hours of sleep each night','Practice stress reduction techniques like deep breathing','Avoid screen time 1 hour before bed','Stay mentally active with reading or puzzles'],
@@ -1257,80 +1302,102 @@ function PatientPortal({patient}){
   </>);
 }
 
-// ─── LOGIN ────────────────────────────────────────────────────────────────────
-function LoginPage({onLogin}){
+// log in
+function LoginPage({onLogin,dark,toggleDark}){
   const [role,setRole]=useState('admin');
   const [email,setEmail]=useState('');
   const [pwd,setPwd]=useState('');
   const [err,setErr]=useState('');
   const [loading,setLoading]=useState(false);
+  const [showPwd,setShowPwd]=useState(false);
   const doLogin=()=>{
     const c=CREDENTIALS[role];
     if(email===c.email&&pwd===c.password){setErr('');setLoading(true);setTimeout(()=>onLogin(role),900);}
     else setErr('Invalid credentials. Try a demo account below.');
   };
   const fillDemo=r=>{setRole(r);setEmail(CREDENTIALS[r].email);setPwd(CREDENTIALS[r].password);setErr('');};
-  const roles=[{id:'admin',label:'Admin',sub:'Full system access'},{id:'doctor',label:'Doctor',sub:'Clinical view'},{id:'patient',label:'Patient',sub:'Personal health'}];
+  const roles=[{id:'admin',label:'Admin',sub:'Full access'},{id:'doctor',label:'Doctor',sub:'Clinical'},{id:'patient',label:'Patient',sub:'Personal'}];
+  const roleIcons={admin:'⚙',doctor:'🩺',patient:'👤'};
   return(
     <div className="lp">
-      <div className="lp-left">
-        <div className="lp-c lp-c1"/><div className="lp-c lp-c2"/><div className="lp-c lp-c3"/>
-        <div className="lp-inner">
-          <div className="lp-brand">
-            <div className="lp-brand-icon">HMS</div>
-            <div><div className="lp-bname">BLUE MED</div><div className="lp-bsub">HEALTH MANAGEMENT SYSTEM</div></div>
-          </div>
-          <div className="lp-h">Modern care,<br/><em>secured</em> by design.</div>
-          <p className="lp-s">A unified healthcare platform built for hospitals, clinics, and care teams worldwide.</p>
-          <div className="lp-feats">
-            {['HIPAA-compliant data encryption','Real-time patient alerts & monitoring','Multi-role access: Admin, Doctor, Patient','Full audit trail & system logs'].map((f,i)=>(
-              <div className="lp-feat" key={i}><div className="lp-fcheck"><div className="lp-fcheck-i"/></div><span className="lp-ft">{f}</span></div>
-            ))}
+      <div className="lp-grid-bg"/>
+      <div className="lp-blob1"/><div className="lp-blob2"/>
+      <button className="theme-toggle" onClick={toggleDark} title={dark?'Switch to Light':'Switch to Dark'}>
+        {dark?'☀️':'🌙'}
+      </button>
+      <div className="lp-card">
+        {/* Left panel */}
+        <div className="lp-left">
+          <div className="lp-dots"/><div className="lp-ring1"/><div className="lp-ring2"/>
+          <div className="lp-inner">
+            <div className="lp-brand">
+              <div className="lp-brand-icon">HMS</div>
+              <div><div className="lp-bname">BLUE MED</div><div className="lp-bsub">HEALTH MANAGEMENT SYSTEM</div></div>
+            </div>
+            <div className="lp-h">Modern care,<br/><em>secured</em> by design.</div>
+            <p className="lp-s">A unified healthcare platform built for hospitals, clinics, and care teams worldwide.</p>
+            <div className="lp-feats">
+              {['HIPAA-compliant data encryption','Real-time patient alerts & monitoring','Multi-role access: Admin, Doctor, Patient','Full audit trail & system logs'].map((f,i)=>(
+                <div className="lp-feat" key={i}><div className="lp-fcheck"><div className="lp-fcheck-i"/></div><span className="lp-ft">{f}</span></div>
+              ))}
+            </div>
           </div>
           <div className="lp-stats">
             {[['3','Roles'],['31','Specialties'],['99.9%','Uptime']].map(([v,l])=>(
               <div key={l}><div className="lp-sv">{v}</div><div className="lp-sl">{l}</div></div>
             ))}
           </div>
-
+        </div>
+        {/* Right panel */}
+        <div className="lp-right">
+          <div className="lb">
+            <div className="lb-title">Welcome back</div>
+            <div className="lb-sub">Select your role and sign in</div>
+            <div className="role-tabs">
+              {roles.map(r=>(
+                <button key={r.id} className={`rtab ${role===r.id?'active':''}`} onClick={()=>{setRole(r.id);setErr('');setEmail('');setPwd('');}}>
+                  <span style={{fontSize:'1rem',display:'block',marginBottom:2}}>{roleIcons[r.id]}</span>
+                  {r.label}<span className="rtab-sub">{r.sub}</span>
+                </button>
+              ))}
+            </div>
+            {err&&<div className="err-msg">{err}</div>}
+            <div className="lf"><label>Email Address</label>
+              <input className="li" type="email" placeholder="your@email.com" value={email} onChange={e=>{setEmail(e.target.value);setErr('');}}/>
+            </div>
+            <div className="lf" style={{position:'relative'}}><label>Password</label>
+              <input className="li" type={showPwd?'text':'password'} placeholder="••••••••" value={pwd}
+                onChange={e=>{setPwd(e.target.value);setErr('');}} onKeyDown={e=>e.key==='Enter'&&doLogin()}/>
+              <button onClick={()=>setShowPwd(p=>!p)} style={{position:'absolute',right:12,top:32,background:'none',border:'none',cursor:'pointer',color:'var(--tl)',fontSize:'.8rem',padding:4}}>
+                {showPwd?'Hide':'Show'}
+              </button>
+            </div>
+            <div className="lp-forg"><a href="#">Forgot password?</a></div>
+            <button className="btn-lo" onClick={doLogin} disabled={loading}>
+              {loading?<span style={{display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
+                <span style={{width:14,height:14,border:'2px solid rgba(255,255,255,.3)',borderTopColor:'#fff',borderRadius:'50%',display:'inline-block',animation:'spin .7s linear infinite'}}/>
+                Signing in…
+              </span>:`Sign in as ${roles.find(r=>r.id===role)?.label} →`}
+            </button>
+            <div className="lp-div">or use a demo account</div>
+            <div className="demo-list">
+              {[{id:'admin',l:'admin@gmail.com',sub:'Administrator'},{id:'doctor',l:'doctor@gmail.com',sub:'Doctor'},{id:'patient',l:'patient@gmail.com',sub:'Patient'}].map(r=>(
+                <button key={r.id} className="demo-btn" onClick={()=>fillDemo(r.id)}>
+                  <span style={{fontSize:'.88rem'}}>{roleIcons[r.id]}</span>
+                  <span style={{flex:1,textAlign:'left'}}><strong style={{color:'var(--txt)'}}>{r.sub}</strong><br/><span style={{fontSize:'.76rem',color:'var(--tl)'}}>{r.l}</span></span>
+                  <span className="demo-pill">Demo</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="lp-right">
-        <div className="lb">
-          <div className="lb-title">Welcome back</div>
-          <div className="lb-sub">Select your role and sign in</div>
-          <div className="role-tabs">
-            {roles.map(r=>(
-              <button key={r.id} className={`rtab ${role===r.id?'active':''}`} onClick={()=>{setRole(r.id);setErr('');setEmail('');setPwd('');}}>
-                {r.label}<span className="rtab-sub">{r.sub}</span>
-              </button>
-            ))}
-          </div>
-          {err&&<div className="err-msg">{err}</div>}
-          <div className="lf"><label>Email Address</label>
-            <input className="li" type="email" placeholder="your@email.com" value={email} onChange={e=>{setEmail(e.target.value);setErr('');}}/>
-          </div>
-          <div className="lf"><label>Password</label>
-            <input className="li" type="password" placeholder="••••••••" value={pwd}
-              onChange={e=>{setPwd(e.target.value);setErr('');}} onKeyDown={e=>e.key==='Enter'&&doLogin()}/>
-          </div>
-          <div className="lp-forg"><a href="#">Forgot password?</a></div>
-          <button className="btn-lo" onClick={doLogin} disabled={loading}>{loading?'Signing in…':`Sign in as ${roles.find(r=>r.id===role)?.label} →`}</button>
-          <div className="lp-div">or use a demo account</div>
-          <div className="demo-list">
-            {[{id:'admin',l:'admin@gmail.com — Admin'},{id:'doctor',l:'doctor@gmail.com — Doctor'},{id:'patient',l:'patient@gmail.com — Patient'}].map(r=>(
-              <button key={r.id} className="demo-btn" onClick={()=>fillDemo(r.id)}>
-                <span>{r.l}</span><span className="demo-pill">Demo</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+      <style>{`@keyframes spin{to{transform:rotate(360deg);}}`}</style>
     </div>
   );
 }
 
-// ─── SHELL ────────────────────────────────────────────────────────────────────
+// ─── 
 const NAV = {
   admin:[{id:'directory',label:'Directory'},{id:'departments',label:'Departments'},{id:'doctors',label:'Doctors'},{id:'patients',label:'Patients'},{id:'protocols',label:'Protocols'},{id:'logs',label:'System Logs'}],
   doctor:[{id:'directory',label:'Directory'},{id:'patients',label:'My Patients'},{id:'alerts',label:'Alerts'},{id:'protocol',label:'Protocol'},{id:'schedule',label:'Schedule'}],
@@ -1348,7 +1415,7 @@ const PAGE_META = {
   overview:{title:'My Health',sub:'Your personal health dashboard — Fatima Jelou'},
 };
 
-function Dashboard({role,onLogout}){
+function Dashboard({role,onLogout,dark,toggleDark}){
   const nav=role==='patient'?[]:NAV[role];
   const [page,setPage]=useState(role==='patient'?'overview':'directory');
   const patientData=PATIENTS[0];
@@ -1368,7 +1435,13 @@ function Dashboard({role,onLogout}){
             </button>
           ))}
         </>}
-        <div className="sb-bot"><button className="btn-out" onClick={onLogout}>Sign Out</button></div>
+        <div className="sb-bot">
+          <button onClick={toggleDark} style={{width:'100%',padding:'9px',marginBottom:8,borderRadius:'var(--r)',border:'1px solid rgba(255,255,255,.12)',background:'transparent',color:'rgba(255,255,255,.55)',fontFamily:'var(--font)',fontSize:'.85rem',fontWeight:600,cursor:'pointer',transition:'all .2s',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}
+            title={dark?'Light mode':'Dark mode'}>
+            <span>{dark?'☀️':'🌙'}</span><span className="nav-label">{dark?'Light Mode':'Dark Mode'}</span>
+          </button>
+          <button className="btn-out" onClick={onLogout}>Sign Out</button>
+        </div>
       </aside>
       <main className="main">
         <div className="mhdr"><div className="mtitle">{meta.title}</div><div className="msub">{meta.sub}</div></div>
@@ -1392,5 +1465,18 @@ function Dashboard({role,onLogout}){
 
 export default function App(){
   const [role,setRole]=useState(null);
-  return(<><style>{css}</style>{!role?<LoginPage onLogin={r=>setRole(r)}/>:<Dashboard role={role} onLogout={()=>setRole(null)}/>}</>);
+  const [dark,setDark]=useState(false);
+  const toggleDark=()=>setDark(d=>!d);
+  useEffect(()=>{
+    document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  },[dark]);
+  return(
+    <>
+      <style>{css}</style>
+      {!role
+        ?<LoginPage onLogin={r=>setRole(r)} dark={dark} toggleDark={toggleDark}/>
+        :<Dashboard role={role} onLogout={()=>setRole(null)} dark={dark} toggleDark={toggleDark}/>
+      }
+    </>
+  );
 }
