@@ -290,7 +290,7 @@ const CREDENTIALS = {
   patient: {email:'patient@gmail.com', password:'patient123', role:'patient'},
 };
 
-// css
+// ─── CSS ──────────────────────────────────────────────────────────────────────
 const css = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -637,7 +637,7 @@ body{background:var(--bg);color:var(--txt);font-family:var(--font);overflow-x:hi
 }
 `;
 
-// 
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
 const Bdg = ({type,label}) => <span className={`badge b-${type}`}>{label}</span>;
 function getInit(name){return name.replace('Dr.','').trim().split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();}
 
@@ -653,7 +653,7 @@ function Modal({title,onClose,children}){
 
 function CreditBanner(){ return null; }
 
-// ─
+// ── SPECIALTY DROPDOWN ────────────────────────────────────────────────────────
 function SpecialtyDropdown({value, onChange}){
   const [open,setOpen]=useState(false);
   const [q,setQ]=useState('');
@@ -693,7 +693,7 @@ function SpecialtyDropdown({value, onChange}){
   );
 }
 
-// 
+// ─── DIRECTORY ────────────────────────────────────────────────────────────────
 function Directory(){
   const [q,setQ]=useState('');
   const [spec,setSpec]=useState('');
@@ -781,7 +781,7 @@ function Directory(){
   </>);
 }
 
-// Admin
+// ─── ADMIN PAGES ──────────────────────────────────────────────────────────────
 function ADepts(){
   return(<><CreditBanner/>
     <div className="dept-grid">
@@ -895,7 +895,7 @@ function ALogs(){
   </>);
 }
 
-// Doctor
+// ─── DOCTOR PAGES ─────────────────────────────────────────────────────────────
 function DPatients(){
   const mine=PATIENTS.filter(p=>p.doctor==='Dr. Sara Mei');
   const [q,setQ]=useState('');
@@ -1002,7 +1002,7 @@ function DSchedule(){
   </>);
 }
 
-// patient
+// ─── PATIENT PORTAL ───────────────────────────────────────────────────────────
 const HEALTH_TIPS = {
   Cardiology:['Take a 30-min walk daily to support heart health','Monitor your blood pressure every morning','Reduce sodium intake — aim for less than 2,300mg/day','Stay hydrated with at least 8 glasses of water'],
   Neurology:['Prioritize 7-9 hours of sleep each night','Practice stress reduction techniques like deep breathing','Avoid screen time 1 hour before bed','Stay mentally active with reading or puzzles'],
@@ -1257,7 +1257,7 @@ function PatientPortal({patient}){
   </>);
 }
 
-// login
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
 function LoginPage({onLogin}){
   const [role,setRole]=useState('admin');
   const [email,setEmail]=useState('');
@@ -1330,7 +1330,7 @@ function LoginPage({onLogin}){
   );
 }
 
-// 
+// ─── SHELL ────────────────────────────────────────────────────────────────────
 const NAV = {
   admin:[{id:'directory',label:'Directory'},{id:'departments',label:'Departments'},{id:'doctors',label:'Doctors'},{id:'patients',label:'Patients'},{id:'protocols',label:'Protocols'},{id:'logs',label:'System Logs'}],
   doctor:[{id:'directory',label:'Directory'},{id:'patients',label:'My Patients'},{id:'alerts',label:'Alerts'},{id:'protocol',label:'Protocol'},{id:'schedule',label:'Schedule'}],
